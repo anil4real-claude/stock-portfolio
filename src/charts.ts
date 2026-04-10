@@ -1,11 +1,12 @@
 // ========== CHART MODULE ==========
 // Uses TradingView Lightweight Charts for professional financial visualization
 
-import { createChart, ColorType, LineSeries, AreaSeries, HistogramSeries } from 'lightweight-charts';
-import type { IChartApi } from 'lightweight-charts';
+import { createChart, ColorType, AreaSeries, HistogramSeries } from 'lightweight-charts';
+import type { IChartApi, ISeriesApi, SeriesType } from 'lightweight-charts';
 import { fetchCandles } from './api';
 
 let chartInstance: IChartApi | null = null;
+let activeSeries: ISeriesApi<SeriesType>[] = [];
 
 const CHART_COLORS = {
   background: 'transparent',
@@ -81,10 +82,10 @@ export async function loadChartData(chart: IChartApi, symbol: string, periodKey:
   if (!period) return;
 
   // Remove old series
-  const seriesList = chart.series();
-  for (const s of seriesList) {
+  for (const s of activeSeries) {
     chart.removeSeries(s);
   }
+  activeSeries = [];
 
   const now = Math.floor(Date.now() / 1000);
   const from = now - period.daysBack * 86400;
@@ -109,6 +110,7 @@ export async function loadChartData(chart: IChartApi, symbol: string, periodKey:
   }));
 
   areaSeries.setData(priceData);
+  activeSeries.push(areaSeries as unknown as ISeriesApi<SeriesType>);
 
   // Volume histogram
   const volumeSeries = chart.addSeries(HistogramSeries, {
@@ -127,6 +129,7 @@ export async function loadChartData(chart: IChartApi, symbol: string, periodKey:
   }));
 
   volumeSeries.setData(volumeData);
+  activeSeries.push(volumeSeries as unknown as ISeriesApi<SeriesType>);
 
   chart.timeScale().fitContent();
 }
@@ -161,7 +164,7 @@ export function renderDonutChart(container: HTMLElement, data: DonutSegment[], c
   let currentAngle = -Math.PI / 2;
   let paths = '';
 
-  data.forEach((seg, i) => {
+  data.forEach((seg, _i) => {
     const pct = seg.value / total;
     const angle = pct * Math.PI * 2;
     const gap = data.length > 1 ? 0.02 : 0;
@@ -199,7 +202,7 @@ export function renderDonutChart(container: HTMLElement, data: DonutSegment[], c
       </div>` : ''}
     </div>
     <div class="allocation-legend">
-      ${data.map((seg, i) => `
+      ${data.map((seg, _i) => `
         <div class="legend-item">
           <div class="legend-dot" style="background:${seg.color}"></div>
           <span class="legend-label">${seg.label}</span>

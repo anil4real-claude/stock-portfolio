@@ -2,7 +2,7 @@
 // Uses PapaParse for robust CSV handling
 
 import Papa from 'papaparse';
-import type { Holding } from './store';
+import type { ParseResult, ParseError } from 'papaparse';
 
 export interface ParsedHolding {
   ticker: string;
@@ -37,7 +37,7 @@ export function parseCSV(file: File): Promise<ParsedHolding[]> {
       header: true,
       skipEmptyLines: true,
       transformHeader: (h: string) => h.trim(),
-      complete: (results) => {
+      complete: (results: ParseResult) => {
         try {
           const headers = results.meta.fields || [];
           const tickerCol = findColumn(headers, TICKER_COLS);
@@ -79,7 +79,7 @@ export function parseCSV(file: File): Promise<ParsedHolding[]> {
           reject(e);
         }
       },
-      error: (err) => {
+      error: (err: ParseError) => {
         reject(new Error(`CSV parse error: ${err.message}`));
       },
     });

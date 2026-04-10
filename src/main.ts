@@ -1,13 +1,13 @@
 // ========== MAIN APPLICATION ==========
 import './style.css';
 import {
-  loadState, saveState, getState, verifyPin, setPin, setApiKey,
+  loadState, getState, verifyPin, setPin, setApiKey,
   getActivePortfolio, setActivePortfolio, createPortfolio, renamePortfolio, deletePortfolio,
   addHolding, removeHolding, updateHoldingPrices,
   getPortfolioTotalValue, getPortfolioTotalCost, getPortfolioTotalGainLoss, getPortfolioDayChange,
-  type Portfolio, type Holding
+  type Portfolio
 } from './store';
-import { fetchQuote, fetchQuotesBatch, fetchCompanyProfile, searchSymbol } from './api';
+import { fetchQuote, fetchQuotesBatch, fetchCompanyProfile } from './api';
 import { parseCSV, parseBatchTickers } from './csv-parser';
 import { initChart, loadChartData, destroyChart, CHART_PERIODS, renderDonutChart, getDonutColor } from './charts';
 import type { IChartApi } from 'lightweight-charts';
@@ -16,7 +16,6 @@ const app = document.getElementById('app')!;
 let currentChart: IChartApi | null = null;
 let currentChartSymbol: string = '';
 let currentChartPeriod: string = '3M';
-let isAuthenticated = false;
 
 // ==============================
 //  TOAST SYSTEM
@@ -91,7 +90,7 @@ function renderPinScreen() {
       const pin = digits.map(d => d.value).join('');
       if (pin.length === 4) {
         if (verifyPin(pin)) {
-          isAuthenticated = true;
+          void 0; // authenticated
           renderDashboard();
         } else {
           errorEl.classList.add('visible');
@@ -120,7 +119,7 @@ function renderPinScreen() {
       });
       if (pasted.length === 4) {
         if (verifyPin(pasted)) {
-          isAuthenticated = true;
+          void 0; // authenticated
           renderDashboard();
         }
       }
@@ -132,7 +131,6 @@ function renderPinScreen() {
 //  DASHBOARD
 // ==============================
 function renderDashboard() {
-  const state = getState();
   const portfolio = getActivePortfolio();
 
   app.innerHTML = `
@@ -268,7 +266,7 @@ function renderChartSection(portfolio: Portfolio): string {
   `;
 }
 
-function renderAllocationSection(portfolio: Portfolio): string {
+function renderAllocationSection(_portfolio: Portfolio): string {
   return `
     <div class="allocation-section">
       <div class="allocation-card">
@@ -697,7 +695,7 @@ function bindHeaderEvents() {
   document.getElementById('btn-open-settings-banner')?.addEventListener('click', showSettingsModal);
 
   document.getElementById('btn-logout')?.addEventListener('click', () => {
-    isAuthenticated = false;
+    void 0; // logged out
     destroyChart();
     currentChart = null;
     renderPinScreen();
