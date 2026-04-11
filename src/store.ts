@@ -47,7 +47,7 @@ function getDefaultState(): AppState {
     pin: DEFAULT_PIN,
     portfolios: [defaultPortfolio],
     activePortfolioId: defaultPortfolio.id,
-    apiKey: '',
+    apiKey: 'd7cltghr01qv03essik0d7cltghr01qv03essikg',
   };
 }
 
