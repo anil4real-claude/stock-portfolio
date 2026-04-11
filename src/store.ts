@@ -30,7 +30,7 @@ export interface AppState {
 }
 
 const STORAGE_KEY = 'stock-portfolio-data';
-const DEFAULT_PIN = '1234';
+const DEFAULT_PIN = '1202';
 
 function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
