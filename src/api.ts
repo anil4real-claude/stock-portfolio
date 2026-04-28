@@ -82,18 +82,25 @@ const YAHOO_RANGE_MAP: Record<string, { range: string; interval: string }> = {
 async function fetchCandlesYahoo(symbol: string, resolution: string): Promise<CandleData | null> {
   try {
     const params = YAHOO_RANGE_MAP[resolution] || { range: '6mo', interval: '1d' };
+    
+    // Use our own Cloudflare Pages Function proxy (no CORS issues)
+    // Falls back to public CORS proxies for local development
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${params.range}&interval=${params.interval}`;
     
-    // Try multiple CORS proxies since some may be blocked in production
-    const proxies = [
-      `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`,
-      `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`,
-    ];
+    const urls = isLocalhost
+      ? [
+          `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`,
+          `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`,
+        ]
+      : [
+          `/api/chart/${encodeURIComponent(symbol)}?range=${params.range}&interval=${params.interval}`,
+        ];
     
     let json: any = null;
-    for (const proxyUrl of proxies) {
+    for (const url of urls) {
       try {
-        const res = await fetch(proxyUrl);
+        const res = await fetch(url);
         if (!res.ok) continue;
         json = await res.json();
         if (json?.chart?.result?.[0]) break;
@@ -102,7 +109,7 @@ async function fetchCandlesYahoo(symbol: string, resolution: string): Promise<Ca
         continue;
       }
     }
-    if (!json) throw new Error('All proxies failed');
+    if (!json) throw new Error('All chart data sources failed');
     
     const result = json?.chart?.result?.[0];
     if (!result) return null;
