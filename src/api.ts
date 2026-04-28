@@ -71,7 +71,78 @@ export async function fetchCompanyProfile(symbol: string): Promise<CompanyProfil
   }
 }
 
+// Map our period configs to Yahoo Finance range/interval params
+const YAHOO_RANGE_MAP: Record<string, { range: string; interval: string }> = {
+  '15': { range: '5d', interval: '15m' },
+  '60': { range: '1mo', interval: '60m' },
+  'D': { range: '6mo', interval: '1d' },
+  'W': { range: '5y', interval: '1wk' },
+};
+
+async function fetchCandlesYahoo(symbol: string, resolution: string): Promise<CandleData | null> {
+  try {
+    const params = YAHOO_RANGE_MAP[resolution] || { range: '6mo', interval: '1d' };
+    const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${params.range}&interval=${params.interval}`;
+    // Use CORS proxy since Yahoo Finance blocks direct browser requests
+    const url = `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Yahoo HTTP ${res.status}`);
+    const json = await res.json();
+    
+    const result = json?.chart?.result?.[0];
+    if (!result) return null;
+    
+    const timestamps = result.timestamp;
+    const quote = result.indicators?.quote?.[0];
+    if (!timestamps || !quote) return null;
+    
+    // Filter out null values
+    const c: number[] = [];
+    const h: number[] = [];
+    const l: number[] = [];
+    const o: number[] = [];
+    const t: number[] = [];
+    const v: number[] = [];
+    
+    for (let i = 0; i < timestamps.length; i++) {
+      if (quote.close[i] != null && quote.open[i] != null) {
+        c.push(quote.close[i]);
+        h.push(quote.high[i] ?? quote.close[i]);
+        l.push(quote.low[i] ?? quote.close[i]);
+        o.push(quote.open[i]);
+        t.push(timestamps[i]);
+        v.push(quote.volume[i] ?? 0);
+      }
+    }
+    
+    if (c.length === 0) return null;
+    return { c, h, l, o, t, v, s: 'ok' };
+  } catch (e) {
+    console.error(`Yahoo Finance candle fetch failed for ${symbol}:`, e);
+    return null;
+  }
+}
+
 export async function fetchCandles(symbol: string, resolution: string, fromTs: number, toTs: number): Promise<CandleData | null> {
+  // Try Yahoo Finance first (free, no key needed)
+  const yahooData = await fetchCandlesYahoo(symbol, resolution);
+  if (yahooData) {
+    // Filter by time range
+    const filtered: CandleData = { c: [], h: [], l: [], o: [], t: [], v: [], s: 'ok' };
+    for (let i = 0; i < yahooData.t.length; i++) {
+      if (yahooData.t[i] >= fromTs && yahooData.t[i] <= toTs) {
+        filtered.c.push(yahooData.c[i]);
+        filtered.h.push(yahooData.h[i]);
+        filtered.l.push(yahooData.l[i]);
+        filtered.o.push(yahooData.o[i]);
+        filtered.t.push(yahooData.t[i]);
+        filtered.v.push(yahooData.v[i]);
+      }
+    }
+    if (filtered.c.length > 0) return filtered;
+  }
+
+  // Fallback to Finnhub
   const key = getApiKey();
   if (!key) return null;
   
