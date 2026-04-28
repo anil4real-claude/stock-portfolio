@@ -83,11 +83,26 @@ async function fetchCandlesYahoo(symbol: string, resolution: string): Promise<Ca
   try {
     const params = YAHOO_RANGE_MAP[resolution] || { range: '6mo', interval: '1d' };
     const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${params.range}&interval=${params.interval}`;
-    // Use CORS proxy since Yahoo Finance blocks direct browser requests
-    const url = `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Yahoo HTTP ${res.status}`);
-    const json = await res.json();
+    
+    // Try multiple CORS proxies since some may be blocked in production
+    const proxies = [
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`,
+      `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`,
+    ];
+    
+    let json: any = null;
+    for (const proxyUrl of proxies) {
+      try {
+        const res = await fetch(proxyUrl);
+        if (!res.ok) continue;
+        json = await res.json();
+        if (json?.chart?.result?.[0]) break;
+        json = null;
+      } catch {
+        continue;
+      }
+    }
+    if (!json) throw new Error('All proxies failed');
     
     const result = json?.chart?.result?.[0];
     if (!result) return null;
