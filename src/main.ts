@@ -3,13 +3,13 @@ import './style.css';
 import {
   loadState, getState, verifyPin, setPin, setApiKey,
   getActivePortfolio, setActivePortfolio, createPortfolio, renamePortfolio, deletePortfolio,
-  addHolding, removeHolding, updateHoldingPrices,
+  addHolding, editHolding, removeHolding, updateHoldingPrices,
   getPortfolioTotalValue, getPortfolioTotalCost, getPortfolioTotalGainLoss, getPortfolioDayChange,
-  type Portfolio
+  type Portfolio, type Holding
 } from './store';
 import { fetchQuote, fetchQuotesBatch, fetchCompanyProfile } from './api';
 import { parseCSV, parseBatchTickers } from './csv-parser';
-import { initChart, loadChartData, destroyChart, CHART_PERIODS, renderDonutChart, getDonutColor } from './charts';
+import { initChart, loadChartData, destroyChart, CHART_PERIODS, renderDonutChart, getDonutColor, type HoldingInfo } from './charts';
 import type { IChartApi } from 'lightweight-charts';
 
 const app = document.getElementById('app')!;
@@ -320,7 +320,7 @@ function renderHoldingsTable(portfolio: Portfolio): string {
     const randomBg = `hsl(${hashString(h.ticker) % 360}, 60%, 25%)`;
 
     return `
-      <tr>
+      <tr class="holding-row" data-edit-ticker="${h.ticker}" style="cursor:pointer;">
         <td>
           <div class="ticker-cell">
             <div class="ticker-icon" style="background:${randomBg}">${h.ticker.slice(0, 2)}</div>
@@ -484,6 +484,69 @@ function showAddTickerModal() {
     // Enter key support
     tickerInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') document.getElementById('btn-confirm-add-ticker')?.click();
+    });
+  });
+}
+
+// ===== Edit Holding Modal =====
+function showEditHoldingModal(holding: Holding) {
+  const portfolioId = getState().activePortfolioId;
+  if (!portfolioId) return;
+
+  showModal(`Edit ${holding.ticker}`, `
+    <div class="form-group">
+      <label class="form-label">Ticker Symbol</label>
+      <input class="form-input" type="text" value="${holding.ticker}" disabled style="opacity:0.5;cursor:not-allowed;" />
+      <div class="form-hint">Ticker cannot be changed. Remove and re-add if needed.</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Company Name</label>
+      <input id="edit-name" class="form-input" placeholder="Company name" type="text" value="${holding.name || ''}" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Number of Shares</label>
+      <input id="edit-shares" class="form-input" placeholder="e.g. 10" type="number" step="any" min="0" value="${holding.shares}" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Average Cost per Share ($)</label>
+      <input id="edit-cost" class="form-input" placeholder="e.g. 150.00" type="number" step="any" min="0" value="${holding.avgCost}" />
+    </div>
+    ${holding.currentPrice ? `
+    <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:0.75rem;margin-top:0.5rem;">
+      <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--text-muted);">
+        <span>Current Price</span>
+        <span style="color:var(--text-primary);font-weight:600;">${formatCurrency(holding.currentPrice)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--text-muted);margin-top:0.25rem;">
+        <span>Market Value</span>
+        <span style="color:var(--text-primary);font-weight:600;">${formatCurrency(holding.marketValue || 0)}</span>
+      </div>
+    </div>
+    ` : ''}
+  `, `
+    <button class="btn" onclick="document.getElementById('modal-overlay')?.remove()">Cancel</button>
+    <button class="btn btn-primary" id="btn-confirm-edit-holding">Save Changes</button>
+  `, () => {
+    document.getElementById('edit-name')?.focus();
+
+    document.getElementById('btn-confirm-edit-holding')?.addEventListener('click', () => {
+      const name = (document.getElementById('edit-name') as HTMLInputElement).value.trim();
+      const shares = parseFloat((document.getElementById('edit-shares') as HTMLInputElement).value);
+      const avgCost = parseFloat((document.getElementById('edit-cost') as HTMLInputElement).value);
+
+      if (isNaN(shares) || shares <= 0) {
+        showToast('Shares must be greater than 0', 'error');
+        return;
+      }
+      if (isNaN(avgCost) || avgCost < 0) {
+        showToast('Average cost must be 0 or greater', 'error');
+        return;
+      }
+
+      editHolding(portfolioId, holding.ticker, { name: name || holding.ticker, shares, avgCost });
+      closeModal();
+      showToast(`Updated ${holding.ticker}`, 'success');
+      renderDashboard();
     });
   });
 }
@@ -742,13 +805,23 @@ function bindPortfolioEvents(portfolio: Portfolio) {
     }
   });
 
-  // Delete holding buttons
+  // Delete holding buttons (stop propagation to prevent edit modal opening)
   document.querySelectorAll('.delete-row-btn[data-delete-ticker]').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
       const ticker = (btn as HTMLElement).dataset.deleteTicker!;
       removeHolding(portfolio.id, ticker);
       showToast(`Removed ${ticker}`, 'success');
       renderDashboard();
+    });
+  });
+
+  // Edit holding rows (click anywhere on the row)
+  document.querySelectorAll('.holding-row[data-edit-ticker]').forEach(row => {
+    row.addEventListener('click', () => {
+      const ticker = (row as HTMLElement).dataset.editTicker!;
+      const holding = portfolio.holdings.find(h => h.ticker === ticker);
+      if (holding) showEditHoldingModal(holding);
     });
   });
 
@@ -761,7 +834,7 @@ function bindPortfolioEvents(portfolio: Portfolio) {
       const title = document.getElementById('chart-title');
       if (title) title.textContent = `📊 ${currentChartSymbol} Price Chart`;
       if (currentChart && getState().apiKey) {
-        loadChartData(currentChart, currentChartSymbol, currentChartPeriod);
+        loadChartData(currentChart, currentChartSymbol, currentChartPeriod, getHoldingInfo(portfolio, currentChartSymbol));
       }
     });
   });
@@ -773,7 +846,7 @@ function bindPortfolioEvents(portfolio: Portfolio) {
       document.querySelectorAll('[data-chart-period]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       if (currentChart && currentChartSymbol && getState().apiKey) {
-        loadChartData(currentChart, currentChartSymbol, currentChartPeriod);
+        loadChartData(currentChart, currentChartSymbol, currentChartPeriod, getHoldingInfo(portfolio, currentChartSymbol));
       }
     });
   });
@@ -801,12 +874,18 @@ async function refreshPrices(portfolio: Portfolio) {
   renderDashboard(true);
 }
 
+function getHoldingInfo(portfolio: Portfolio, symbol: string): HoldingInfo | undefined {
+  const h = portfolio.holdings.find(h => h.ticker === symbol);
+  if (!h) return undefined;
+  return { shares: h.shares, avgCost: h.avgCost };
+}
+
 function mountChartAndAllocation(portfolio: Portfolio) {
   // Mount TradingView chart
   const chartBody = document.getElementById('chart-body');
   if (chartBody && currentChartSymbol && getState().apiKey) {
     currentChart = initChart(chartBody);
-    loadChartData(currentChart, currentChartSymbol, currentChartPeriod);
+    loadChartData(currentChart, currentChartSymbol, currentChartPeriod, getHoldingInfo(portfolio, currentChartSymbol));
   }
 
   // Mount allocation donut

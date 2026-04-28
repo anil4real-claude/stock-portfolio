@@ -158,6 +158,26 @@ export function addHolding(portfolioId: string, holding: Omit<Holding, 'currentP
   saveState();
 }
 
+export function editHolding(portfolioId: string, ticker: string, updates: { name?: string; shares?: number; avgCost?: number }): void {
+  const portfolio = state.portfolios.find(p => p.id === portfolioId);
+  if (!portfolio) return;
+  const holding = portfolio.holdings.find(h => h.ticker === ticker);
+  if (!holding) return;
+
+  if (updates.name !== undefined) holding.name = updates.name;
+  if (updates.shares !== undefined) holding.shares = updates.shares;
+  if (updates.avgCost !== undefined) holding.avgCost = updates.avgCost;
+
+  // Recalculate derived fields if price data exists
+  if (holding.currentPrice) {
+    holding.marketValue = holding.currentPrice * holding.shares;
+    holding.gainLoss = (holding.currentPrice - holding.avgCost) * holding.shares;
+    holding.gainLossPct = holding.avgCost > 0 ? ((holding.currentPrice - holding.avgCost) / holding.avgCost) * 100 : 0;
+  }
+
+  saveState();
+}
+
 export function removeHolding(portfolioId: string, ticker: string): void {
   const portfolio = state.portfolios.find(p => p.id === portfolioId);
   if (!portfolio) return;

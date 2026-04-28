@@ -521,6 +521,25 @@ input, select, textarea { font-family: inherit; }
   background: var(--bg-glass-hover);
 }
 
+.holding-row {
+  position: relative;
+}
+
+.holding-row:hover::after {
+  content: '✏️ Edit';
+  position: absolute;
+  right: 3.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+  color: var(--accent-blue);
+  background: var(--accent-blue-bg);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  opacity: 0.8;
+}
+
 .holdings-table tbody td {
   padding: 0.85rem 1.25rem;
   font-size: 0.85rem;

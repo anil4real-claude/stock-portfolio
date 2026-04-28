@@ -1,7 +1,7 @@
 // ========== CHART MODULE ==========
 // Uses TradingView Lightweight Charts for professional financial visualization
 
-import { createChart, ColorType, AreaSeries, HistogramSeries } from 'lightweight-charts';
+import { createChart, ColorType, AreaSeries, LineSeries, HistogramSeries } from 'lightweight-charts';
 import type { IChartApi, ISeriesApi, SeriesType } from 'lightweight-charts';
 import { fetchCandles } from './api';
 
@@ -18,6 +18,8 @@ const CHART_COLORS = {
   crosshairColor: 'rgba(255, 255, 255, 0.15)',
   volumeUpColor: 'rgba(34, 197, 94, 0.3)',
   volumeDownColor: 'rgba(239, 68, 68, 0.3)',
+  holdingLineColor: '#22c55e',
+  costBasisColor: '#f59e0b',
 };
 
 export function initChart(container: HTMLElement): IChartApi {
@@ -77,7 +79,12 @@ export const CHART_PERIODS: Record<string, PeriodConfig> = {
   'ALL': { resolution: 'W', daysBack: 365 * 5, label: 'All Time' },
 };
 
-export async function loadChartData(chart: IChartApi, symbol: string, periodKey: string): Promise<void> {
+export interface HoldingInfo {
+  shares: number;
+  avgCost: number;
+}
+
+export async function loadChartData(chart: IChartApi, symbol: string, periodKey: string, holdingInfo?: HoldingInfo): Promise<void> {
   const period = CHART_PERIODS[periodKey];
   if (!period) return;
 
@@ -95,13 +102,14 @@ export async function loadChartData(chart: IChartApi, symbol: string, periodKey:
     return;
   }
 
-  // Area series for price
+  // Area series for stock price
   const areaSeries = chart.addSeries(AreaSeries, {
     lineColor: CHART_COLORS.lineColor,
     topColor: CHART_COLORS.areaTopColor,
     bottomColor: CHART_COLORS.areaBottomColor,
     lineWidth: 2,
     priceFormat: { type: 'price', precision: 2, minMove: 0.01 },
+    title: 'Price',
   });
 
   const priceData = candles.t.map((t, i) => ({
@@ -111,6 +119,48 @@ export async function loadChartData(chart: IChartApi, symbol: string, periodKey:
 
   areaSeries.setData(priceData);
   activeSeries.push(areaSeries as unknown as ISeriesApi<SeriesType>);
+
+  // Holding value line (on separate right price scale)
+  if (holdingInfo && holdingInfo.shares > 0) {
+    // Cost basis horizontal line (on price scale, same as stock price)
+    const costBasisSeries = chart.addSeries(LineSeries, {
+      color: CHART_COLORS.costBasisColor,
+      lineWidth: 2,
+      lineStyle: 2, // dashed
+      priceFormat: { type: 'price', precision: 2, minMove: 0.01 },
+      title: 'Avg Cost',
+      crosshairMarkerVisible: false,
+    });
+
+    // Create horizontal line at avgCost across the full time range
+    const costBasisData = [
+      { time: candles.t[0] as any, value: holdingInfo.avgCost },
+      { time: candles.t[candles.t.length - 1] as any, value: holdingInfo.avgCost },
+    ];
+    costBasisSeries.setData(costBasisData);
+    activeSeries.push(costBasisSeries as unknown as ISeriesApi<SeriesType>);
+
+    // Holding value line on separate scale
+    const holdingValueSeries = chart.addSeries(LineSeries, {
+      color: CHART_COLORS.holdingLineColor,
+      lineWidth: 2,
+      priceFormat: { type: 'price', precision: 2, minMove: 0.01 },
+      priceScaleId: 'holding',
+      title: 'My Value',
+    });
+
+    chart.priceScale('holding').applyOptions({
+      scaleMargins: { top: 0.1, bottom: 0.3 },
+    });
+
+    const holdingData = candles.t.map((t, i) => ({
+      time: t as any,
+      value: candles.c[i] * holdingInfo.shares,
+    }));
+
+    holdingValueSeries.setData(holdingData);
+    activeSeries.push(holdingValueSeries as unknown as ISeriesApi<SeriesType>);
+  }
 
   // Volume histogram
   const volumeSeries = chart.addSeries(HistogramSeries, {
