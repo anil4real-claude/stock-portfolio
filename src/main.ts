@@ -130,7 +130,7 @@ function renderPinScreen() {
 // ==============================
 //  DASHBOARD
 // ==============================
-function renderDashboard() {
+function renderDashboard(skipRefresh = false) {
   const portfolio = getActivePortfolio();
 
   app.innerHTML = `
@@ -145,7 +145,12 @@ function renderDashboard() {
   bindTabEvents();
   if (portfolio) {
     bindPortfolioEvents(portfolio);
-    refreshPrices(portfolio);
+    if (skipRefresh) {
+      // Just mount chart/allocation without fetching prices again
+      mountChartAndAllocation(portfolio);
+    } else {
+      refreshPrices(portfolio);
+    }
   }
 }
 
@@ -792,8 +797,8 @@ async function refreshPrices(portfolio: Portfolio) {
     updateHoldingPrices(portfolio.id, ticker, quote.c, quote.pc);
   }
 
-  // Re-render stats and holdings (but preserve chart)
-  renderDashboard();
+  // Re-render stats and holdings (but don't re-fetch prices)
+  renderDashboard(true);
 }
 
 function mountChartAndAllocation(portfolio: Portfolio) {
