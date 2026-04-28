@@ -546,6 +546,17 @@ input, select, textarea { font-family: inherit; }
   white-space: nowrap;
 }
 
+.totals-row {
+  background: rgba(59, 130, 246, 0.06);
+  border-top: 2px solid var(--accent-blue) !important;
+}
+
+.totals-row td {
+  padding: 1rem 1.25rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
 .ticker-cell {
   display: flex;
   align-items: center;

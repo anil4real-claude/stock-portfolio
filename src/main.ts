@@ -297,6 +297,7 @@ function renderHoldingsSection(portfolio: Portfolio): string {
           <button class="btn btn-sm btn-primary" id="btn-add-ticker">+ Add Ticker</button>
           <button class="btn btn-sm" id="btn-batch-add">📋 Batch Add</button>
           <button class="btn btn-sm" id="btn-import-csv">📄 Import CSV</button>
+          ${hasHoldings ? '<button class="btn btn-sm btn-success" id="btn-export-csv">⬇️ Export CSV</button>' : ''}
           <button class="btn btn-sm btn-danger" id="btn-delete-portfolio" title="Delete portfolio">🗑️</button>
         </div>
       </div>
@@ -347,6 +348,11 @@ function renderHoldingsTable(portfolio: Portfolio): string {
     `;
   }).join('');
 
+  const totalCost = getPortfolioTotalCost(portfolio);
+  const totalGainLoss = getPortfolioTotalGainLoss(portfolio);
+  const totalGainLossPct = totalCost > 0 ? ((totalValue - totalCost) / totalCost) * 100 : 0;
+  const totalDayChange = getPortfolioDayChange(portfolio);
+
   return `
     <table class="holdings-table">
       <thead>
@@ -363,6 +369,19 @@ function renderHoldingsTable(portfolio: Portfolio): string {
         </tr>
       </thead>
       <tbody>${rows}</tbody>
+      <tfoot>
+        <tr class="totals-row">
+          <td><strong>📊 Totals (${portfolio.holdings.length} holdings)</strong></td>
+          <td></td>
+          <td class="${totalDayChange >= 0 ? 'positive-text' : 'negative-text'}"><strong>${formatChange(totalDayChange)}</strong></td>
+          <td></td>
+          <td><strong>${formatCurrency(totalCost)}</strong></td>
+          <td><strong>${formatCurrency(totalValue)}</strong></td>
+          <td class="${totalGainLoss >= 0 ? 'positive-text' : 'negative-text'}"><strong>${formatChange(totalGainLoss)} (${formatPct(totalGainLossPct)})</strong></td>
+          <td><strong>100%</strong></td>
+          <td></td>
+        </tr>
+      </tfoot>
     </table>
   `;
 }
@@ -790,6 +809,7 @@ function bindPortfolioEvents(portfolio: Portfolio) {
   document.getElementById('btn-add-ticker')?.addEventListener('click', showAddTickerModal);
   document.getElementById('btn-batch-add')?.addEventListener('click', showBatchAddModal);
   document.getElementById('btn-import-csv')?.addEventListener('click', showImportCSVModal);
+  document.getElementById('btn-export-csv')?.addEventListener('click', () => exportPortfolioCSV(portfolio));
 
   document.getElementById('btn-delete-portfolio')?.addEventListener('click', () => {
     if (getState().portfolios.length <= 1) {
@@ -916,6 +936,76 @@ function mountChartAndAllocation(portfolio: Portfolio) {
       </div>
     `).join('');
   }
+}
+
+// ==============================
+//  EXPORT CSV
+// ==============================
+function exportPortfolioCSV(portfolio: Portfolio) {
+  const totalValue = getPortfolioTotalValue(portfolio);
+  const totalCost = getPortfolioTotalCost(portfolio);
+  const totalGainLoss = getPortfolioTotalGainLoss(portfolio);
+  const totalDayChange = getPortfolioDayChange(portfolio);
+
+  // CSV header
+  const headers = ['Ticker', 'Name', 'Shares', 'Avg Cost', 'Current Price', 'Day Change', 'Day Change %', 'Market Value', 'Cost Basis', 'Gain/Loss', 'Gain/Loss %', 'Weight %'];
+
+  // CSV rows for each holding
+  const rows = portfolio.holdings.map(h => {
+    const price = h.currentPrice || h.avgCost;
+    const mktVal = h.marketValue || (h.avgCost * h.shares);
+    const costBasis = h.avgCost * h.shares;
+    const weight = totalValue > 0 ? (mktVal / totalValue) * 100 : 0;
+    return [
+      h.ticker,
+      `"${(h.name || h.ticker).replace(/"/g, '""')}"`,
+      h.shares,
+      h.avgCost.toFixed(2),
+      price.toFixed(2),
+      (h.change || 0).toFixed(2),
+      (h.changePct || 0).toFixed(2),
+      mktVal.toFixed(2),
+      costBasis.toFixed(2),
+      (h.gainLoss || 0).toFixed(2),
+      (h.gainLossPct || 0).toFixed(2),
+      weight.toFixed(1),
+    ];
+  });
+
+  // Totals row
+  const totalsRow = [
+    'TOTAL',
+    `"${portfolio.name}"`,
+    '',
+    '',
+    '',
+    totalDayChange.toFixed(2),
+    '',
+    totalValue.toFixed(2),
+    totalCost.toFixed(2),
+    totalGainLoss.toFixed(2),
+    totalCost > 0 ? ((totalValue - totalCost) / totalCost * 100).toFixed(2) : '0.00',
+    '100.0',
+  ];
+
+  // Build CSV string
+  const csvContent = [
+    headers.join(','),
+    ...rows.map(r => r.join(',')),
+    '', // Empty separator line
+    totalsRow.join(','),
+  ].join('\n');
+
+  // Download
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  const date = new Date().toISOString().split('T')[0];
+  link.download = `${portfolio.name.replace(/[^a-zA-Z0-9]/g, '_')}_${date}.csv`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+
+  showToast(`Exported ${portfolio.holdings.length} holdings to CSV`, 'success');
 }
 
 // ==============================
