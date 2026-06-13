@@ -53,7 +53,18 @@ const LEVELS: SportLevel[] = [
     ],
   },
   {
-    id: 3, sport: 'Football', icon: '🏈', color: '#c4832a',
+    id: 3, sport: 'Baseball', icon: '⚾', color: '#c41e3a',
+    action: 'Swing', prompt: 'Time your swing!',
+    opponents: [
+      { name: 'Babe Ruth', title: 'The Sultan of Swat', difficulty: 1 },
+      { name: 'Willie Mays', title: 'The Say Hey Kid', difficulty: 2 },
+      { name: 'Ted Williams', title: 'The Splendid Splinter', difficulty: 3 },
+      { name: 'Hank Aaron', title: "Hammerin' Hank", difficulty: 4 },
+      { name: 'Barry Bonds', title: 'The Record Holder', difficulty: 5 },
+    ],
+  },
+  {
+    id: 4, sport: 'Football', icon: '🏈', color: '#c4832a',
     action: 'Throw', prompt: 'Time your pass perfectly!',
     opponents: [
       { name: 'Joe Montana', title: 'The Golden Arm', difficulty: 1 },
@@ -64,7 +75,7 @@ const LEVELS: SportLevel[] = [
     ],
   },
   {
-    id: 4, sport: 'Basketball', icon: '🏀', color: '#e05c00',
+    id: 5, sport: 'Basketball', icon: '🏀', color: '#e05c00',
     action: 'Shoot', prompt: 'Time your shot!',
     opponents: [
       { name: 'Wilt Chamberlain', title: 'The Big Dipper', difficulty: 1 },
@@ -72,17 +83,6 @@ const LEVELS: SportLevel[] = [
       { name: 'Larry Bird', title: 'The Legend', difficulty: 3 },
       { name: 'Michael Jordan', title: 'Air Jordan', difficulty: 4 },
       { name: 'LeBron James', title: 'The King', difficulty: 5 },
-    ],
-  },
-  {
-    id: 5, sport: 'Baseball', icon: '⚾', color: '#c41e3a',
-    action: 'Swing', prompt: 'Time your swing!',
-    opponents: [
-      { name: 'Babe Ruth', title: 'The Sultan of Swat', difficulty: 1 },
-      { name: 'Willie Mays', title: 'The Say Hey Kid', difficulty: 2 },
-      { name: 'Ted Williams', title: 'The Splendid Splinter', difficulty: 3 },
-      { name: 'Hank Aaron', title: "Hammerin' Hank", difficulty: 4 },
-      { name: 'Barry Bonds', title: 'The Record Holder', difficulty: 5 },
     ],
   },
   {
