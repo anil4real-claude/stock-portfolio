@@ -1,4 +1,4 @@
-import { renderSoccerGame } from './soccer';
+import { renderSportGame, SPORT_CONFIGS } from './sportGame';
 
 // ==================== TYPES ====================
 
@@ -179,20 +179,6 @@ let soccerCleanup: (() => void) | null = null;
 
 const SAVE_KEY = 'mrwagners-progress';
 
-function saveProgress() {
-  localStorage.setItem(SAVE_KEY, JSON.stringify(S.completedLevels));
-}
-
-function diffConfig(d: number): { zoneSize: number; speed: number } {
-  return [
-    { zoneSize: 36, speed: 0.7 },
-    { zoneSize: 26, speed: 1.2 },
-    { zoneSize: 17, speed: 2.0 },
-    { zoneSize: 11, speed: 2.9 },
-    { zoneSize: 7,  speed: 3.9 },
-  ][Math.min(d - 1, 4)];
-}
-
 // ==================== ENTRY ====================
 
 export function renderGame(el: HTMLElement, onExit: () => void): void {
@@ -305,156 +291,21 @@ function drawGame(): void {
 
   const lvl = LEVELS[S.levelId];
 
-  // Soccer uses the canvas game instead of the timing bar
-  if (lvl.id === 0) {
-    soccerCleanup = renderSoccerGame(ROOT, () => {
+  // All levels use the canvas sport game
+  const cfg = SPORT_CONFIGS[lvl.id];
+  if (cfg) {
+    soccerCleanup = renderSportGame(ROOT, cfg, () => {
       soccerCleanup = null;
       S.screen = 'levels';
       draw();
     });
     return;
   }
-  const opp = lvl.opponents[S.opponentIdx];
-  const cfg = diffConfig(opp.difficulty);
-
-  // Randomize sweet spot position within bounds
-  const margin = cfg.zoneSize / 2 + 5;
-  S.sweetSpot = margin + Math.random() * (100 - margin * 2);
-  S.zoneSize = cfg.zoneSize;
-  S.speed = cfg.speed;
-  S.meterPos = 0;
-  S.meterDir = 1;
-  S.result = null;
-
-  const stars = '★'.repeat(opp.difficulty) + '☆'.repeat(5 - opp.difficulty);
-  const dots = lvl.opponents.map((_, i) =>
-    `<span class="gm-dot ${i < S.opponentIdx ? 'gm-dot-done' : i === S.opponentIdx ? 'gm-dot-cur' : ''}"></span>`
-  ).join('');
-
-  ROOT.innerHTML = `
-    <div class="gm-screen gm-play" style="--lc:${lvl.color}">
-      <div class="gm-play-hdr">
-        <button class="gm-back-btn" id="gm-back">${lvl.icon} Levels</button>
-        <span class="gm-play-sport">${lvl.sport}</span>
-        <span class="gm-play-num">Challenge ${S.opponentIdx + 1}/5</span>
-      </div>
-
-      <div class="gm-opp-card">
-        <div class="gm-opp-avatar" style="background:${lvl.color}22;border-color:${lvl.color}44">${lvl.icon}</div>
-        <div class="gm-opp-info">
-          <div class="gm-opp-vs">VS</div>
-          <div class="gm-opp-name">${opp.name}</div>
-          <div class="gm-opp-title">"${opp.title}"</div>
-          <div class="gm-opp-stars">${stars}</div>
-        </div>
-      </div>
-
-      <div class="gm-dots">${dots}</div>
-
-      <p class="gm-prompt">${lvl.prompt}</p>
-
-      <div class="gm-meter-wrap">
-        <div class="gm-meter" id="gm-meter">
-          <div class="gm-meter-zone" id="gm-zone"
-               style="left:${S.sweetSpot - S.zoneSize / 2}%;width:${S.zoneSize}%"></div>
-          <div class="gm-meter-cursor" id="gm-cursor"></div>
-        </div>
-        <div class="gm-meter-labels"><span>0</span><span>50</span><span>100</span></div>
-      </div>
-
-      <div class="gm-result-wrap" id="gm-result"></div>
-
-      <button class="gm-action-btn" id="gm-action" style="--lc:${lvl.color}">
-        ${lvl.action.toUpperCase()}!
-      </button>
-      <p class="gm-hint">Tap the button or press <kbd>SPACE</kbd></p>
-    </div>
-  `;
-
-  document.getElementById('gm-back')?.addEventListener('click', () => {
-    stopMeter();
-    S.screen = 'levels';
-    draw();
-  });
-
-  document.getElementById('gm-action')?.addEventListener('click', handleAction);
-  document.addEventListener('keydown', onKey);
-
-  // Short pause before bar starts moving
-  setTimeout(startMeter, 600);
-}
-
-// ==================== METER ====================
-
-function startMeter(): void {
-  S.meterRunning = true;
-  animStep();
 }
 
 function stopMeter(): void {
   S.meterRunning = false;
-  if (S.animFrame !== null) {
-    cancelAnimationFrame(S.animFrame);
-    S.animFrame = null;
-  }
-  document.removeEventListener('keydown', onKey);
-}
-
-function animStep(): void {
-  if (!S.meterRunning) return;
-  S.meterPos += S.meterDir * S.speed;
-  if (S.meterPos >= 100) { S.meterPos = 100; S.meterDir = -1; }
-  if (S.meterPos <= 0) { S.meterPos = 0; S.meterDir = 1; }
-  const cursor = document.getElementById('gm-cursor');
-  if (cursor) cursor.style.left = S.meterPos + '%';
-  S.animFrame = requestAnimationFrame(animStep);
-}
-
-function onKey(e: KeyboardEvent): void {
-  if (e.code === 'Space') { e.preventDefault(); handleAction(); }
-}
-
-function handleAction(): void {
-  if (!S.meterRunning) return;
-  stopMeter();
-
-  const zStart = S.sweetSpot - S.zoneSize / 2;
-  const zEnd   = S.sweetSpot + S.zoneSize / 2;
-  const hit = S.meterPos >= zStart && S.meterPos <= zEnd;
-
-  const lvl = LEVELS[S.levelId];
-  const opp = lvl.opponents[S.opponentIdx];
-
-  const resultEl = document.getElementById('gm-result');
-  const actionBtn = document.getElementById('gm-action') as HTMLButtonElement | null;
-  if (actionBtn) actionBtn.disabled = true;
-
-  if (resultEl) {
-    resultEl.innerHTML = hit
-      ? `<div class="gm-result-hit">🎯 Perfect! You beat ${opp.name}!</div>`
-      : `<div class="gm-result-miss">❌ Missed! Try again!</div>`;
-  }
-
-  // Flash cursor color
-  const cursor = document.getElementById('gm-cursor');
-  if (cursor) cursor.classList.add(hit ? 'gm-cursor-hit' : 'gm-cursor-miss');
-
-  setTimeout(() => {
-    if (hit) {
-      S.opponentIdx++;
-      if (S.opponentIdx >= 5) {
-        if (!S.completedLevels.includes(S.levelId)) {
-          S.completedLevels.push(S.levelId);
-          saveProgress();
-        }
-        S.screen = S.completedLevels.length >= 12 ? 'allDone' : 'levelDone';
-        draw();
-        return;
-      }
-    }
-    // Retry same opponent or advance to next — re-draw game screen
-    drawGame();
-  }, 1600);
+  if (S.animFrame !== null) { cancelAnimationFrame(S.animFrame); S.animFrame = null; }
 }
 
 // ==================== LEVEL DONE ====================
