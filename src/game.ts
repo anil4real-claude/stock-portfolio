@@ -20,18 +20,7 @@ interface SportLevel {
 
 const LEVELS: SportLevel[] = [
   {
-    id: 0, sport: 'Football', icon: '🏈', color: '#c4832a',
-    action: 'Throw', prompt: 'Time your pass perfectly!',
-    opponents: [
-      { name: 'Joe Montana', title: 'The Golden Arm', difficulty: 1 },
-      { name: 'Walter Payton', title: 'Sweetness', difficulty: 2 },
-      { name: 'Jerry Rice', title: 'The GOAT Receiver', difficulty: 3 },
-      { name: 'Lawrence Taylor', title: 'LT', difficulty: 4 },
-      { name: 'Tom Brady', title: 'The GOAT', difficulty: 5 },
-    ],
-  },
-  {
-    id: 1, sport: 'Soccer', icon: '⚽', color: '#2d8a4e',
+    id: 0, sport: 'Soccer', icon: '⚽', color: '#2d8a4e',
     action: 'Kick', prompt: 'Time your shot on goal!',
     opponents: [
       { name: 'Pelé', title: 'The King', difficulty: 1 },
@@ -39,6 +28,17 @@ const LEVELS: SportLevel[] = [
       { name: 'Ronaldo R9', title: 'The Phenomenon', difficulty: 3 },
       { name: 'Zinedine Zidane', title: 'Zizou', difficulty: 4 },
       { name: 'Lionel Messi', title: 'La Pulga', difficulty: 5 },
+    ],
+  },
+  {
+    id: 1, sport: 'Football', icon: '🏈', color: '#c4832a',
+    action: 'Throw', prompt: 'Time your pass perfectly!',
+    opponents: [
+      { name: 'Joe Montana', title: 'The Golden Arm', difficulty: 1 },
+      { name: 'Walter Payton', title: 'Sweetness', difficulty: 2 },
+      { name: 'Jerry Rice', title: 'The GOAT Receiver', difficulty: 3 },
+      { name: 'Lawrence Taylor', title: 'LT', difficulty: 4 },
+      { name: 'Tom Brady', title: 'The GOAT', difficulty: 5 },
     ],
   },
   {
@@ -151,39 +151,6 @@ const LEVELS: SportLevel[] = [
       { name: 'Usain Bolt', title: 'Lightning Bolt', difficulty: 5 },
     ],
   },
-  {
-    id: 12, sport: 'Table Tennis', icon: '🏓', color: '#0070b0',
-    action: 'Return', prompt: 'Time your return!',
-    opponents: [
-      { name: 'Jan-Ove Waldner', title: 'The Mozart', difficulty: 1 },
-      { name: 'Deng Yaping', title: 'The Queen', difficulty: 2 },
-      { name: 'Liu Guoliang', title: 'The Legend', difficulty: 3 },
-      { name: 'Zhang Jike', title: 'The Tiger', difficulty: 4 },
-      { name: 'Ma Long', title: 'The Dragon', difficulty: 5 },
-    ],
-  },
-  {
-    id: 13, sport: 'Cycling', icon: '🚴', color: '#c8a800',
-    action: 'Sprint', prompt: 'Time your sprint!',
-    opponents: [
-      { name: 'Eddy Merckx', title: 'The Cannibal', difficulty: 1 },
-      { name: 'Bernard Hinault', title: 'The Badger', difficulty: 2 },
-      { name: 'Miguel Indurain', title: 'Big Mig', difficulty: 3 },
-      { name: 'Marco Pantani', title: 'The Pirate', difficulty: 4 },
-      { name: 'Chris Froome', title: 'The Kenyan Brit', difficulty: 5 },
-    ],
-  },
-  {
-    id: 14, sport: 'Wrestling', icon: '🤼', color: '#8040c0',
-    action: 'Takedown', prompt: 'Time your takedown!',
-    opponents: [
-      { name: 'Dan Gable', title: 'The Undefeated', difficulty: 1 },
-      { name: 'John Smith', title: 'The Cowboy', difficulty: 2 },
-      { name: 'Aleksandr Karelin', title: 'The Russian Bear', difficulty: 3 },
-      { name: 'Cael Sanderson', title: 'The Unbeaten', difficulty: 4 },
-      { name: 'Jordan Burroughs', title: "J'Den", difficulty: 5 },
-    ],
-  },
 ];
 
 // ==================== STATE ====================
@@ -267,7 +234,7 @@ function draw(): void {
 
 function drawHome(): void {
   const done = S.completedLevels.length;
-  const pct = Math.round((done / 15) * 100);
+  const pct = Math.round((done / 12) * 100);
   ROOT.innerHTML = `
     <div class="gm-screen gm-home">
       <button class="gm-exit-btn" id="gm-exit">✕ Exit</button>
@@ -276,7 +243,7 @@ function drawHome(): void {
         <h1 class="gm-home-title">Mr Wagner's<br>Sports Station</h1>
         <p class="gm-home-sub">Beat the greatest athletes of all time</p>
         <div class="gm-home-progress">
-          <div class="gm-home-prog-label">${done} / 15 sports mastered</div>
+          <div class="gm-home-prog-label">${done} / 12 sports mastered</div>
           <div class="gm-home-prog-bar"><div class="gm-home-prog-fill" style="width:${pct}%"></div></div>
         </div>
         <button class="gm-btn gm-btn-primary" id="gm-play">
@@ -308,7 +275,7 @@ function drawLevels(): void {
       <div class="gm-levels-hdr">
         <button class="gm-back-btn" id="gm-back">← Back</button>
         <span class="gm-levels-hdr-title">Choose Your Sport</span>
-        <span class="gm-levels-hdr-count">${S.completedLevels.length}/15</span>
+        <span class="gm-levels-hdr-count">${S.completedLevels.length}/12</span>
       </div>
       <div class="gm-lvl-grid">${cards}</div>
     </div>
@@ -465,7 +432,7 @@ function handleAction(): void {
           S.completedLevels.push(S.levelId);
           saveProgress();
         }
-        S.screen = S.completedLevels.length >= 15 ? 'allDone' : 'levelDone';
+        S.screen = S.completedLevels.length >= 12 ? 'allDone' : 'levelDone';
         draw();
         return;
       }
@@ -479,14 +446,14 @@ function handleAction(): void {
 
 function drawLevelDone(): void {
   const lvl = LEVELS[S.levelId];
-  const nextId = (S.levelId + 1) % 15;
+  const nextId = (S.levelId + 1) % 12;
   ROOT.innerHTML = `
     <div class="gm-screen gm-win">
       <div class="gm-win-icon">${lvl.icon}</div>
       <h2 class="gm-win-title">${lvl.sport} Complete!</h2>
       <p class="gm-win-sub">You defeated all 5 ${lvl.sport} legends!</p>
       <div class="gm-win-stars">⭐⭐⭐</div>
-      <p class="gm-win-count">${S.completedLevels.length} / 15 sports mastered</p>
+      <p class="gm-win-count">${S.completedLevels.length} / 12 sports mastered</p>
       <div class="gm-win-btns">
         <button class="gm-btn" id="gm-all-sports">All Sports</button>
         <button class="gm-btn gm-btn-primary" id="gm-next">Next Sport →</button>
@@ -509,7 +476,7 @@ function drawAllDone(): void {
     <div class="gm-screen gm-win">
       <div class="gm-win-icon">🏆</div>
       <h2 class="gm-win-title">Sports Legend!</h2>
-      <p class="gm-win-sub">You conquered all 15 sports at Mr Wagner's Sports Station!</p>
+      <p class="gm-win-sub">You conquered all 12 sports at Mr Wagner's Sports Station!</p>
       <div class="gm-win-stars">🥇🥇🥇</div>
       <div class="gm-win-btns">
         <button class="gm-btn" id="gm-home">Home</button>
