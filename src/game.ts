@@ -64,29 +64,18 @@ const LEVELS: SportLevel[] = [
     ],
   },
   {
-    id: 4, sport: 'Football', icon: '🏈', color: '#c4832a',
-    action: 'Throw', prompt: 'Time your pass perfectly!',
+    id: 4, sport: 'Volleyball', icon: '🏐', color: '#e0a800',
+    action: 'Spike', prompt: 'Time your spike!',
     opponents: [
-      { name: 'Joe Montana', title: 'The Golden Arm', difficulty: 1 },
-      { name: 'Walter Payton', title: 'Sweetness', difficulty: 2 },
-      { name: 'Jerry Rice', title: 'The GOAT Receiver', difficulty: 3 },
-      { name: 'Lawrence Taylor', title: 'LT', difficulty: 4 },
-      { name: 'Tom Brady', title: 'The GOAT', difficulty: 5 },
+      { name: 'Karch Kiraly', title: 'The Legend', difficulty: 1 },
+      { name: 'Giba', title: 'The Brazilian King', difficulty: 2 },
+      { name: 'Lang Ping', title: 'The Iron Hammer', difficulty: 3 },
+      { name: 'Misty May-Treanor', title: 'Beach GOAT', difficulty: 4 },
+      { name: 'Kerri Walsh Jennings', title: '3× Gold Medalist', difficulty: 5 },
     ],
   },
   {
-    id: 5, sport: 'Basketball', icon: '🏀', color: '#e05c00',
-    action: 'Shoot', prompt: 'Time your shot!',
-    opponents: [
-      { name: 'Wilt Chamberlain', title: 'The Big Dipper', difficulty: 1 },
-      { name: 'Magic Johnson', title: 'Showtime', difficulty: 2 },
-      { name: 'Larry Bird', title: 'The Legend', difficulty: 3 },
-      { name: 'Michael Jordan', title: 'Air Jordan', difficulty: 4 },
-      { name: 'LeBron James', title: 'The King', difficulty: 5 },
-    ],
-  },
-  {
-    id: 6, sport: 'Golf', icon: '⛳', color: '#3a8a3a',
+    id: 5, sport: 'Golf', icon: '⛳', color: '#3a8a3a',
     action: 'Swing', prompt: 'Time your swing!',
     opponents: [
       { name: 'Arnold Palmer', title: 'The King', difficulty: 1 },
@@ -97,7 +86,7 @@ const LEVELS: SportLevel[] = [
     ],
   },
   {
-    id: 7, sport: 'Dodgeball', icon: '🔴', color: '#d13030',
+    id: 6, sport: 'Dodgeball', icon: '🔴', color: '#d13030',
     action: 'Throw', prompt: 'Time your throw!',
     opponents: [
       { name: 'The Rookie', title: 'Just Getting Started', difficulty: 1 },
@@ -105,6 +94,17 @@ const LEVELS: SportLevel[] = [
       { name: 'The Crusher', title: 'Power Thrower', difficulty: 3 },
       { name: 'The Ace', title: 'Pinpoint Accuracy', difficulty: 4 },
       { name: 'White Goodman', title: 'The Champion', difficulty: 5 },
+    ],
+  },
+  {
+    id: 7, sport: 'Football', icon: '🏈', color: '#c4832a',
+    action: 'Throw', prompt: 'Time your pass perfectly!',
+    opponents: [
+      { name: 'Joe Montana', title: 'The Golden Arm', difficulty: 1 },
+      { name: 'Walter Payton', title: 'Sweetness', difficulty: 2 },
+      { name: 'Jerry Rice', title: 'The GOAT Receiver', difficulty: 3 },
+      { name: 'Lawrence Taylor', title: 'LT', difficulty: 4 },
+      { name: 'Tom Brady', title: 'The GOAT', difficulty: 5 },
     ],
   },
   {
@@ -119,18 +119,7 @@ const LEVELS: SportLevel[] = [
     ],
   },
   {
-    id: 9, sport: 'Volleyball', icon: '🏐', color: '#e0a800',
-    action: 'Spike', prompt: 'Time your spike!',
-    opponents: [
-      { name: 'Karch Kiraly', title: 'The Legend', difficulty: 1 },
-      { name: 'Giba', title: 'The Brazilian King', difficulty: 2 },
-      { name: 'Lang Ping', title: 'The Iron Hammer', difficulty: 3 },
-      { name: 'Misty May-Treanor', title: 'Beach GOAT', difficulty: 4 },
-      { name: 'Kerri Walsh Jennings', title: '3× Gold Medalist', difficulty: 5 },
-    ],
-  },
-  {
-    id: 10, sport: 'Boxing', icon: '🥊', color: '#c04040',
+    id: 9, sport: 'Boxing', icon: '🥊', color: '#c04040',
     action: 'Punch', prompt: 'Time your punch!',
     opponents: [
       { name: 'Jack Dempsey', title: 'The Manassa Mauler', difficulty: 1 },
@@ -141,7 +130,7 @@ const LEVELS: SportLevel[] = [
     ],
   },
   {
-    id: 11, sport: 'Track & Field', icon: '🏃', color: '#d06000',
+    id: 10, sport: 'Track & Field', icon: '🏃', color: '#d06000',
     action: 'Sprint', prompt: 'Time your burst!',
     opponents: [
       { name: 'Jesse Owens', title: 'The Buckeye Bullet', difficulty: 1 },
@@ -149,6 +138,17 @@ const LEVELS: SportLevel[] = [
       { name: 'Michael Johnson', title: 'The Gold Shoes', difficulty: 3 },
       { name: 'Maurice Greene', title: "The World's Fastest", difficulty: 4 },
       { name: 'Usain Bolt', title: 'Lightning Bolt', difficulty: 5 },
+    ],
+  },
+  {
+    id: 11, sport: 'Basketball', icon: '🏀', color: '#e05c00',
+    action: 'Shoot', prompt: 'Time your shot!',
+    opponents: [
+      { name: 'Wilt Chamberlain', title: 'The Big Dipper', difficulty: 1 },
+      { name: 'Magic Johnson', title: 'Showtime', difficulty: 2 },
+      { name: 'Larry Bird', title: 'The Legend', difficulty: 3 },
+      { name: 'Michael Jordan', title: 'Air Jordan', difficulty: 4 },
+      { name: 'LeBron James', title: 'The King', difficulty: 5 },
     ],
   },
 ];
