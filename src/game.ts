@@ -31,7 +31,18 @@ const LEVELS: SportLevel[] = [
     ],
   },
   {
-    id: 1, sport: 'Football', icon: '🏈', color: '#c4832a',
+    id: 1, sport: 'Tennis', icon: '🎾', color: '#8ab440',
+    action: 'Serve', prompt: 'Time your serve!',
+    opponents: [
+      { name: 'Rod Laver', title: 'The Rocket', difficulty: 1 },
+      { name: 'Bjorn Borg', title: 'The Iceman', difficulty: 2 },
+      { name: 'John McEnroe', title: 'Mac', difficulty: 3 },
+      { name: 'Pete Sampras', title: 'Pistol Pete', difficulty: 4 },
+      { name: 'Roger Federer', title: 'The GOAT', difficulty: 5 },
+    ],
+  },
+  {
+    id: 2, sport: 'Football', icon: '🏈', color: '#c4832a',
     action: 'Throw', prompt: 'Time your pass perfectly!',
     opponents: [
       { name: 'Joe Montana', title: 'The Golden Arm', difficulty: 1 },
@@ -42,7 +53,7 @@ const LEVELS: SportLevel[] = [
     ],
   },
   {
-    id: 2, sport: 'Basketball', icon: '🏀', color: '#e05c00',
+    id: 3, sport: 'Basketball', icon: '🏀', color: '#e05c00',
     action: 'Shoot', prompt: 'Time your shot!',
     opponents: [
       { name: 'Wilt Chamberlain', title: 'The Big Dipper', difficulty: 1 },
@@ -53,7 +64,7 @@ const LEVELS: SportLevel[] = [
     ],
   },
   {
-    id: 3, sport: 'Baseball', icon: '⚾', color: '#c41e3a',
+    id: 4, sport: 'Baseball', icon: '⚾', color: '#c41e3a',
     action: 'Swing', prompt: 'Time your swing!',
     opponents: [
       { name: 'Babe Ruth', title: 'The Sultan of Swat', difficulty: 1 },
@@ -64,7 +75,7 @@ const LEVELS: SportLevel[] = [
     ],
   },
   {
-    id: 4, sport: 'Hockey', icon: '🏒', color: '#0880d0',
+    id: 5, sport: 'Hockey', icon: '🏒', color: '#0880d0',
     action: 'Shoot', prompt: 'Time your slap shot!',
     opponents: [
       { name: 'Gordie Howe', title: 'Mr. Hockey', difficulty: 1 },
@@ -72,17 +83,6 @@ const LEVELS: SportLevel[] = [
       { name: 'Mario Lemieux', title: 'Le Magnifique', difficulty: 3 },
       { name: 'Mark Messier', title: 'The Messiah', difficulty: 4 },
       { name: 'Wayne Gretzky', title: 'The Great One', difficulty: 5 },
-    ],
-  },
-  {
-    id: 5, sport: 'Tennis', icon: '🎾', color: '#8ab440',
-    action: 'Serve', prompt: 'Time your serve!',
-    opponents: [
-      { name: 'Rod Laver', title: 'The Rocket', difficulty: 1 },
-      { name: 'Bjorn Borg', title: 'The Iceman', difficulty: 2 },
-      { name: 'John McEnroe', title: 'Mac', difficulty: 3 },
-      { name: 'Pete Sampras', title: 'Pistol Pete', difficulty: 4 },
-      { name: 'Roger Federer', title: 'The GOAT', difficulty: 5 },
     ],
   },
   {
