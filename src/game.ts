@@ -1,3 +1,5 @@
+import { renderSoccerGame } from './soccer';
+
 // ==================== TYPES ====================
 
 interface Opponent {
@@ -173,6 +175,7 @@ interface GameState {
 let S: GameState;
 let ROOT: HTMLElement;
 let EXIT_CB: () => void;
+let soccerCleanup: (() => void) | null = null;
 
 const SAVE_KEY = 'mrwagners-progress';
 
@@ -215,6 +218,8 @@ export function renderGame(el: HTMLElement, onExit: () => void): void {
 
 export function destroyGame(): void {
   stopMeter();
+  soccerCleanup?.();
+  soccerCleanup = null;
 }
 
 // ==================== DRAW ROUTER ====================
@@ -299,6 +304,16 @@ function drawGame(): void {
   stopMeter();
 
   const lvl = LEVELS[S.levelId];
+
+  // Soccer uses the canvas game instead of the timing bar
+  if (lvl.id === 0) {
+    soccerCleanup = renderSoccerGame(ROOT, () => {
+      soccerCleanup = null;
+      S.screen = 'levels';
+      draw();
+    });
+    return;
+  }
   const opp = lvl.opponents[S.opponentIdx];
   const cfg = diffConfig(opp.difficulty);
 
