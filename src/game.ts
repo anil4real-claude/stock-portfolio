@@ -42,7 +42,18 @@ const LEVELS: SportLevel[] = [
     ],
   },
   {
-    id: 2, sport: 'Football', icon: '🏈', color: '#c4832a',
+    id: 2, sport: 'Hockey', icon: '🏒', color: '#0880d0',
+    action: 'Shoot', prompt: 'Time your slap shot!',
+    opponents: [
+      { name: 'Gordie Howe', title: 'Mr. Hockey', difficulty: 1 },
+      { name: 'Bobby Orr', title: 'Number 4', difficulty: 2 },
+      { name: 'Mario Lemieux', title: 'Le Magnifique', difficulty: 3 },
+      { name: 'Mark Messier', title: 'The Messiah', difficulty: 4 },
+      { name: 'Wayne Gretzky', title: 'The Great One', difficulty: 5 },
+    ],
+  },
+  {
+    id: 3, sport: 'Football', icon: '🏈', color: '#c4832a',
     action: 'Throw', prompt: 'Time your pass perfectly!',
     opponents: [
       { name: 'Joe Montana', title: 'The Golden Arm', difficulty: 1 },
@@ -53,7 +64,7 @@ const LEVELS: SportLevel[] = [
     ],
   },
   {
-    id: 3, sport: 'Basketball', icon: '🏀', color: '#e05c00',
+    id: 4, sport: 'Basketball', icon: '🏀', color: '#e05c00',
     action: 'Shoot', prompt: 'Time your shot!',
     opponents: [
       { name: 'Wilt Chamberlain', title: 'The Big Dipper', difficulty: 1 },
@@ -64,7 +75,7 @@ const LEVELS: SportLevel[] = [
     ],
   },
   {
-    id: 4, sport: 'Baseball', icon: '⚾', color: '#c41e3a',
+    id: 5, sport: 'Baseball', icon: '⚾', color: '#c41e3a',
     action: 'Swing', prompt: 'Time your swing!',
     opponents: [
       { name: 'Babe Ruth', title: 'The Sultan of Swat', difficulty: 1 },
@@ -72,17 +83,6 @@ const LEVELS: SportLevel[] = [
       { name: 'Ted Williams', title: 'The Splendid Splinter', difficulty: 3 },
       { name: 'Hank Aaron', title: "Hammerin' Hank", difficulty: 4 },
       { name: 'Barry Bonds', title: 'The Record Holder', difficulty: 5 },
-    ],
-  },
-  {
-    id: 5, sport: 'Hockey', icon: '🏒', color: '#0880d0',
-    action: 'Shoot', prompt: 'Time your slap shot!',
-    opponents: [
-      { name: 'Gordie Howe', title: 'Mr. Hockey', difficulty: 1 },
-      { name: 'Bobby Orr', title: 'Number 4', difficulty: 2 },
-      { name: 'Mario Lemieux', title: 'Le Magnifique', difficulty: 3 },
-      { name: 'Mark Messier', title: 'The Messiah', difficulty: 4 },
-      { name: 'Wayne Gretzky', title: 'The Great One', difficulty: 5 },
     ],
   },
   {
