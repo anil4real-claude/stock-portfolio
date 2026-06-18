@@ -11,6 +11,7 @@ import { fetchQuote, fetchQuotesBatch, fetchCompanyProfile } from './api';
 import { parseCSV, parseBatchTickers } from './csv-parser';
 import { initChart, loadChartData, destroyChart, CHART_PERIODS, renderDonutChart, getDonutColor, type HoldingInfo } from './charts';
 import type { IChartApi } from 'lightweight-charts';
+import { renderGame, destroyGame } from './game';
 
 const app = document.getElementById('app')!;
 let currentChart: IChartApi | null = null;
@@ -164,6 +165,7 @@ function renderHeader(): string {
         </div>
         <div class="header-right">
           <button class="btn btn-sm" id="btn-refresh" title="Refresh prices">🔄 Refresh</button>
+          <button class="btn btn-sm" id="btn-game" title="Mr Wagner's Sports Station">🏆 Game</button>
           <button class="btn btn-sm" id="btn-settings" title="Settings">⚙️</button>
           <button class="btn btn-sm btn-danger" id="btn-logout" title="Lock">🔒</button>
         </div>
@@ -778,6 +780,7 @@ function bindHeaderEvents() {
     }
   });
 
+  document.getElementById('btn-game')?.addEventListener('click', launchGame);
   document.getElementById('btn-settings')?.addEventListener('click', showSettingsModal);
   document.getElementById('btn-open-settings-banner')?.addEventListener('click', showSettingsModal);
 
@@ -1018,6 +1021,19 @@ function hashString(str: string): number {
     hash |= 0;
   }
   return Math.abs(hash);
+}
+
+// ==============================
+//  GAME LAUNCHER
+// ==============================
+function launchGame(): void {
+  const overlay = document.createElement('div');
+  overlay.id = 'game-overlay';
+  document.body.appendChild(overlay);
+  renderGame(overlay, () => {
+    destroyGame();
+    overlay.remove();
+  });
 }
 
 // ==============================
