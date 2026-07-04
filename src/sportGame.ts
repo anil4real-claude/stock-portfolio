@@ -19,27 +19,27 @@ export interface SportConfig {
   id: number;
   sport: string;
   icon: string;
-  fieldColor1: string;   // primary field color
-  fieldColor2: string;   // alternating stripe
-  fieldLine: string;     // line color
-  goalColor: string;     // goalpost color
-  ballColor: string;     // main ball color
-  ballAccent: string;    // ball patch/stripe color
+  fieldColor1: string;
+  fieldColor2: string;
+  fieldLine: string;
+  goalColor: string;
+  ballColor: string;
+  ballAccent: string;
   ballShape: 'soccer' | 'basketball' | 'football' | 'puck' | 'volleyball' | 'baseball' | 'disc';
-  playerJersey: string;  // player team color (blue-ish)
-  cpuJersey: string;     // cpu team color (red-ish)
-  shootLabel: string;    // SHOOT button label
-  sprintLabel: string;   // SPRINT button label
+  playerJersey: string;
+  cpuJersey: string;
+  shootLabel: string;
+  sprintLabel: string;
   shootColor: string;
   sprintColor: string;
-  goalLabel: string;     // "GOAL!" text on score
+  goalLabel: string;
   fieldType: 'grass' | 'court' | 'ice' | 'sand' | 'track' | 'ring';
   goalShape: 'rect' | 'hoop' | 'crease' | 'endzone' | 'lane' | 'net';
   gameSecs: number;
 }
 
 export const SPORT_CONFIGS: Record<number, SportConfig> = {
-  0: { // Soccer
+  0: {
     id: 0, sport: 'Soccer', icon: '⚽',
     fieldColor1: '#2a7535', fieldColor2: '#31883f', fieldLine: 'rgba(255,255,255,0.7)',
     goalColor: 'rgba(255,255,255,0.9)', ballColor: '#f8fafc', ballAccent: '#1e293b',
@@ -47,7 +47,7 @@ export const SPORT_CONFIGS: Record<number, SportConfig> = {
     shootLabel: 'SHOOT', sprintLabel: 'SPRINT', shootColor: '#dc2626', sprintColor: '#16a34a',
     goalLabel: '⚽  GOAL!', fieldType: 'grass', goalShape: 'rect', gameSecs: 120,
   },
-  1: { // Tennis
+  1: {
     id: 1, sport: 'Tennis', icon: '🎾',
     fieldColor1: '#3a7d44', fieldColor2: '#3a7d44', fieldLine: 'rgba(255,255,255,0.85)',
     goalColor: 'rgba(255,255,255,0.9)', ballColor: '#c8e642', ballAccent: '#a0b830',
@@ -55,7 +55,7 @@ export const SPORT_CONFIGS: Record<number, SportConfig> = {
     shootLabel: 'SERVE', sprintLabel: 'SPRINT', shootColor: '#c8e642', sprintColor: '#16a34a',
     goalLabel: '🎾  POINT!', fieldType: 'court', goalShape: 'net', gameSecs: 90,
   },
-  2: { // Hockey
+  2: {
     id: 2, sport: 'Hockey', icon: '🏒',
     fieldColor1: '#cce8f8', fieldColor2: '#d8eef8', fieldLine: 'rgba(0,80,180,0.7)',
     goalColor: '#ff3300', ballColor: '#1a1a1a', ballAccent: '#333',
@@ -63,7 +63,7 @@ export const SPORT_CONFIGS: Record<number, SportConfig> = {
     shootLabel: 'SHOOT', sprintLabel: 'SPRINT', shootColor: '#dc2626', sprintColor: '#1d4ed8',
     goalLabel: '🏒  GOAL!', fieldType: 'ice', goalShape: 'crease', gameSecs: 120,
   },
-  3: { // Baseball
+  3: {
     id: 3, sport: 'Baseball', icon: '⚾',
     fieldColor1: '#3a7d44', fieldColor2: '#31883f', fieldLine: 'rgba(255,255,255,0.7)',
     goalColor: 'rgba(255,255,255,0.8)', ballColor: '#f8fafc', ballAccent: '#cc3333',
@@ -71,7 +71,7 @@ export const SPORT_CONFIGS: Record<number, SportConfig> = {
     shootLabel: 'SWING', sprintLabel: 'RUN', shootColor: '#c41e3a', sprintColor: '#16a34a',
     goalLabel: '⚾  HOME RUN!', fieldType: 'grass', goalShape: 'endzone', gameSecs: 90,
   },
-  4: { // Volleyball
+  4: {
     id: 4, sport: 'Volleyball', icon: '🏐',
     fieldColor1: '#d4a855', fieldColor2: '#c99d4f', fieldLine: 'rgba(255,255,255,0.85)',
     goalColor: 'rgba(255,255,255,0.9)', ballColor: '#f5e0a0', ballAccent: '#1d4ed8',
@@ -79,7 +79,7 @@ export const SPORT_CONFIGS: Record<number, SportConfig> = {
     shootLabel: 'SPIKE', sprintLabel: 'DIVE', shootColor: '#1d4ed8', sprintColor: '#d4a855',
     goalLabel: '🏐  POINT!', fieldType: 'sand', goalShape: 'net', gameSecs: 90,
   },
-  5: { // Golf
+  5: {
     id: 5, sport: 'Golf', icon: '⛳',
     fieldColor1: '#2a7535', fieldColor2: '#1e5c28', fieldLine: 'rgba(255,255,255,0.5)',
     goalColor: '#fff', ballColor: '#fff', ballAccent: '#ccc',
@@ -87,7 +87,7 @@ export const SPORT_CONFIGS: Record<number, SportConfig> = {
     shootLabel: 'SWING', sprintLabel: 'AIM', shootColor: '#16a34a', sprintColor: '#854d0e',
     goalLabel: '⛳  BIRDIE!', fieldType: 'grass', goalShape: 'lane', gameSecs: 90,
   },
-  6: { // Dodgeball
+  6: {
     id: 6, sport: 'Dodgeball', icon: '🔴',
     fieldColor1: '#6b21a8', fieldColor2: '#581c87', fieldLine: 'rgba(255,255,255,0.5)',
     goalColor: '#ff3300', ballColor: '#dc2626', ballAccent: '#991b1b',
@@ -95,7 +95,7 @@ export const SPORT_CONFIGS: Record<number, SportConfig> = {
     shootLabel: 'THROW', sprintLabel: 'DODGE', shootColor: '#dc2626', sprintColor: '#9333ea',
     goalLabel: '🔴  HIT!', fieldType: 'court', goalShape: 'endzone', gameSecs: 90,
   },
-  7: { // Football
+  7: {
     id: 7, sport: 'Football', icon: '🏈',
     fieldColor1: '#2a7535', fieldColor2: '#31883f', fieldLine: 'rgba(255,255,255,0.7)',
     goalColor: 'rgba(255,255,255,0.9)', ballColor: '#8B4513', ballAccent: '#f8fafc',
@@ -103,7 +103,7 @@ export const SPORT_CONFIGS: Record<number, SportConfig> = {
     shootLabel: 'PASS', sprintLabel: 'SPRINT', shootColor: '#c4832a', sprintColor: '#16a34a',
     goalLabel: '🏈  TOUCHDOWN!', fieldType: 'grass', goalShape: 'endzone', gameSecs: 120,
   },
-  8: { // Swimming
+  8: {
     id: 8, sport: 'Swimming', icon: '🏊',
     fieldColor1: '#0369a1', fieldColor2: '#0284c7', fieldLine: 'rgba(255,255,255,0.5)',
     goalColor: '#f59e0b', ballColor: '#f8fafc', ballAccent: '#0369a1',
@@ -111,7 +111,7 @@ export const SPORT_CONFIGS: Record<number, SportConfig> = {
     shootLabel: 'STROKE', sprintLabel: 'KICK', shootColor: '#0284c7', sprintColor: '#0369a1',
     goalLabel: '🏊  FINISH!', fieldType: 'court', goalShape: 'lane', gameSecs: 90,
   },
-  9: { // Boxing
+  9: {
     id: 9, sport: 'Boxing', icon: '🥊',
     fieldColor1: '#374151', fieldColor2: '#1f2937', fieldLine: 'rgba(255,255,255,0.6)',
     goalColor: '#f59e0b', ballColor: '#dc2626', ballAccent: '#991b1b',
@@ -119,7 +119,7 @@ export const SPORT_CONFIGS: Record<number, SportConfig> = {
     shootLabel: 'PUNCH', sprintLabel: 'BLOCK', shootColor: '#dc2626', sprintColor: '#6b7280',
     goalLabel: '🥊  KO!', fieldType: 'ring', goalShape: 'rect', gameSecs: 90,
   },
-  10: { // Track & Field
+  10: {
     id: 10, sport: 'Track & Field', icon: '🏃',
     fieldColor1: '#dc4e12', fieldColor2: '#c94410', fieldLine: 'rgba(255,255,255,0.7)',
     goalColor: '#f59e0b', ballColor: '#f59e0b', ballAccent: '#333',
@@ -127,7 +127,7 @@ export const SPORT_CONFIGS: Record<number, SportConfig> = {
     shootLabel: 'SPRINT', sprintLabel: 'BOOST', shootColor: '#f59e0b', sprintColor: '#d06000',
     goalLabel: '🏃  FINISH!', fieldType: 'track', goalShape: 'lane', gameSecs: 60,
   },
-  11: { // Basketball
+  11: {
     id: 11, sport: 'Basketball', icon: '🏀',
     fieldColor1: '#92400e', fieldColor2: '#78350f', fieldLine: 'rgba(255,255,255,0.65)',
     goalColor: '#f97316', ballColor: '#e05c00', ballAccent: '#1e293b',
@@ -137,7 +137,6 @@ export const SPORT_CONFIGS: Record<number, SportConfig> = {
   },
 };
 
-// ── Joystick / button state ──────────────────────────────────
 interface Joystick { active: boolean; pid: number; base: V2; stick: V2; dx: number; dy: number; OR: number; NR: number }
 interface ActionBtn { cx: number; cy: number; r: number; label: string; color: string; glow: string; held: boolean; pid: number }
 
@@ -151,16 +150,15 @@ interface GState {
   fc: number;
 }
 
-// ── Main export ──────────────────────────────────────────────
 export function renderSportGame(
   container: HTMLElement,
   cfg: SportConfig,
   onBack: () => void,
 ): () => void {
   container.innerHTML = `
-    <div style="display:flex;flex-direction:column;height:100%;background:#0c0c0c;font-family:Inter,system-ui,sans-serif;">
+    <div style="display:flex;flex-direction:column;height:100%;background:#0c0c0c;font-family:Inter,system-ui,sans-serif;overscroll-behavior:none;touch-action:none;">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:0.42rem 0.85rem;background:rgba(0,0,0,0.65);flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.06);">
-        <button id="sg-exit" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);color:#94a3b8;border-radius:20px;padding:0.28rem 0.72rem;font-size:0.76rem;cursor:pointer;font-family:inherit;">← Back</button>
+        <button id="sg-exit" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);color:#94a3b8;border-radius:20px;padding:0.5rem 0.9rem;font-size:0.76rem;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">← Back</button>
         <div style="text-align:center;">
           <div style="font-size:0.8rem;">${cfg.icon}</div>
           <div id="sg-score" style="font-size:1.45rem;font-weight:900;color:#fff;letter-spacing:0.06em;line-height:1.1;">0 – 0</div>
@@ -198,7 +196,7 @@ export function renderSportGame(
   }
 
   function mkJoy(): Joystick {
-    return { active: false, pid: -1, base: v2(0,0), stick: v2(0,0), dx: 0, dy: 0, OR: 52, NR: 23 };
+    return { active: false, pid: -1, base: v2(0,0), stick: v2(0,0), dx: 0, dy: 0, OR: 58, NR: 26 };
   }
   function mkBtn(label: string, color: string, glow: string): ActionBtn {
     return { cx: 0, cy: 0, r: 0, label, color, glow, held: false, pid: -1 };
@@ -238,14 +236,13 @@ export function renderSportGame(
   function layoutControls(s: GState) {
     const cy = H * 0.84;
     s.joy.base = v2(W * 0.15, cy); s.joy.stick = { ...s.joy.base };
-    s.joy.OR = Math.min(52, W * 0.13); s.joy.NR = s.joy.OR * 0.44;
-    s.shootBtn.cx  = W * 0.87; s.shootBtn.cy  = H * 0.82; s.shootBtn.r = Math.min(44, W * 0.12);
-    s.sprintBtn.cx = W * 0.65; s.sprintBtn.cy = H * 0.88; s.sprintBtn.r = Math.min(36, W * 0.095);
+    s.joy.OR = Math.min(62, W * 0.15); s.joy.NR = s.joy.OR * 0.44;
+    s.shootBtn.cx  = W * 0.87; s.shootBtn.cy  = H * 0.82; s.shootBtn.r = Math.min(52, W * 0.14);
+    s.sprintBtn.cx = W * 0.65; s.sprintBtn.cy = H * 0.88; s.sprintBtn.r = Math.min(44, W * 0.115);
   }
 
   let S = mkState();
 
-  // Resize
   function resize() {
     const r = fw.getBoundingClientRect();
     W = Math.floor(r.width); H = Math.floor(r.height);
@@ -254,7 +251,6 @@ export function renderSportGame(
   const ro = new ResizeObserver(resize);
   ro.observe(fw);
 
-  // Keyboard
   const keys = { u:false, d:false, l:false, r:false, space:false };
   const kd = (e: KeyboardEvent) => {
     if (e.key==='ArrowUp'   ||e.key==='w'){keys.u=true;e.preventDefault();}
@@ -273,7 +269,6 @@ export function renderSportGame(
   document.addEventListener('keydown', kd);
   document.addEventListener('keyup',   ku);
 
-  // Canvas pointer events
   function cxy(e: PointerEvent): V2 {
     const r = canvas.getBoundingClientRect();
     return v2((e.clientX-r.left)*(W/r.width), (e.clientY-r.top)*(H/r.height));
@@ -303,11 +298,11 @@ export function renderSportGame(
   };
   canvas.addEventListener('pointerup',     pu);
   canvas.addEventListener('pointercancel', pu);
+  canvas.addEventListener('contextmenu',   e => e.preventDefault()); // block long-press menu on Android
 
   document.getElementById('sg-exit')!.addEventListener('click', ()=>{ cleanup(); onBack(); });
 
-  // Physics
-  const M = 12; // field margin
+  const M = 12;
   function step(b: Body){ b.pos=add(b.pos,b.vel); }
   function damp(b: Body, f: number){ b.vel=mul(b.vel,f); }
   function cap(b: Body, max: number){ const s=vlen(b.vel); if(s>max)b.vel=mul(b.vel,max/s); }
@@ -333,7 +328,6 @@ export function renderSportGame(
     ball.vel=add(ball.vel,add(mul(body.vel,0.8),mul(dir,2.0)));
   }
 
-  // Goal / end
   function triggerGoal(forPlayer: boolean){
     if(forPlayer)S.pScore++;else S.aiScore++;
     ovMsg.textContent = forPlayer ? cfg.goalLabel : '🔴  CPU SCORES!';
@@ -352,8 +346,8 @@ export function renderSportGame(
     ovMsg.style.animation='none'; void (ovMsg as HTMLElement).offsetWidth;
     ovMsg.style.animation='sg-pop 0.4s ease';
     ovBtns.innerHTML=`
-      <button id="sg-retry" style="padding:0.55rem 1.3rem;border-radius:20px;background:rgba(255,255,255,0.13);border:1px solid rgba(255,255,255,0.22);color:#fff;font-size:0.88rem;cursor:pointer;font-family:inherit;">▶ Replay</button>
-      <button id="sg-bk2"   style="padding:0.55rem 1.3rem;border-radius:20px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#64748b;font-size:0.88rem;cursor:pointer;font-family:inherit;">← Exit</button>
+      <button id="sg-retry" style="padding:0.7rem 1.4rem;border-radius:20px;background:rgba(255,255,255,0.13);border:1px solid rgba(255,255,255,0.22);color:#fff;font-size:0.95rem;cursor:pointer;font-family:inherit;touch-action:manipulation;">▶ Replay</button>
+      <button id="sg-bk2"   style="padding:0.7rem 1.4rem;border-radius:20px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#64748b;font-size:0.95rem;cursor:pointer;font-family:inherit;touch-action:manipulation;">← Exit</button>
     `;
     ov.classList.add('show');
     document.getElementById('sg-retry')?.addEventListener('click',()=>{
@@ -368,7 +362,6 @@ export function renderSportGame(
     timerEl.style.color=S.timeLeft<30?'#ef4444':'#22c55e';
   }
 
-  // Update loop
   let prevTs=0;
   const PSPEED=3.6, SSPEED=5.2, AISPEED=2.4, KPOW=11, BFRIC=0.93, PFRIC=0.7;
 
@@ -379,7 +372,6 @@ export function renderSportGame(
     S.timeLeft-=dt;
     if(S.timeLeft<=0){S.timeLeft=0;S.phase='end';updateHUD();showEnd();return;}
 
-    // Player
     const j=S.joy;
     let jx=j.dx,jy=j.dy;
     if(keys.l)jx-=1;if(keys.r)jx+=1;if(keys.u)jy-=1;if(keys.d)jy+=1;
@@ -392,7 +384,6 @@ export function renderSportGame(
     cap(S.player,topSpd); step(S.player); damp(S.player,PFRIC);
     bounce(S.player,M+16,W-M-16,M+16,H-M-16);
 
-    // Shoot
     if(S.shootBtn.held&&S.pKickCD<=0){
       if(vdist(S.player.pos,S.ball.pos)<S.player.r+S.ball.r+32){
         const{gl,gr}=goalBounds();
@@ -403,16 +394,13 @@ export function renderSportGame(
     }
     if(S.pKickCD>0)S.pKickCD--;
 
-    // CPU
     updateCPU(S.cpuA, true);  if(S.aiCooldownA>0)S.aiCooldownA--;
     updateCPU(S.cpuB, false); if(S.aiCooldownB>0)S.aiCooldownB--;
 
-    // Ball physics
     dribble(S.player,S.ball); dribble(S.cpuA,S.ball); dribble(S.cpuB,S.ball);
     sep(S.player,S.cpuA); sep(S.player,S.cpuB); sep(S.cpuA,S.cpuB);
     step(S.ball); damp(S.ball,BFRIC);
 
-    // Ball walls + goal
     const{gl,gr}=goalBounds();
     if(S.ball.pos.x-9<M){S.ball.pos.x=M+9;S.ball.vel.x= Math.abs(S.ball.vel.x)*0.65;}
     if(S.ball.pos.x+9>W-M){S.ball.pos.x=W-M-9;S.ball.vel.x=-Math.abs(S.ball.vel.x)*0.65;}
@@ -439,7 +427,6 @@ export function renderSportGame(
     step(cpu); damp(cpu,PFRIC); bounce(cpu,M+16,W-M-16,M+16,H-M-16);
   }
 
-  // ── Rendering ────────────────────────────────────────────────
   function render(){
     if(!ctx||W<=0||H<=0)return;
     ctx.clearRect(0,0,W,H);
@@ -451,7 +438,6 @@ export function renderSportGame(
     drawControls();
   }
 
-  // ── Field ───────────────────────────────────────────────────
   function drawField(){
     if(cfg.fieldType==='grass'||cfg.fieldType==='sand'||cfg.fieldType==='track'){
       for(let i=0;i<7;i++){
@@ -468,17 +454,14 @@ export function renderSportGame(
       const rw=W*0.8,rh=H*0.75;
       ctx.beginPath(); ctx.roundRect((W-rw)/2,(H-rh)/2,rw,rh,16); ctx.fill();
     } else {
-      // court / pool
       ctx.fillStyle=cfg.fieldColor1; ctx.fillRect(0,0,W,H);
       if(cfg.fieldType==='court'){
-        ctx.fillStyle=cfg.fieldColor2;
         for(let i=0;i<6;i++){
           if(i%2===0){ ctx.fillStyle='rgba(0,0,0,0.06)'; ctx.fillRect(0,(i/6)*H,W,H/6); }
         }
       }
     }
 
-    // Lane lines for pool/track
     if(cfg.fieldType==='court'&&cfg.goalShape==='lane'){
       ctx.save(); ctx.strokeStyle=cfg.fieldLine; ctx.lineWidth=2;
       const lanes=4;
@@ -492,7 +475,6 @@ export function renderSportGame(
     ctx.fillStyle='rgba(255,200,0,0.07)';
     ctx.fillRect(gl,0,gw,28+M); ctx.fillRect(gl,H-28-M,gw,28+M);
 
-    // Field lines
     ctx.save(); ctx.strokeStyle=cfg.fieldLine; ctx.lineWidth=2;
     ctx.beginPath();
     ctx.moveTo(M,M); ctx.lineTo(gl,M);
@@ -511,17 +493,14 @@ export function renderSportGame(
     ctx.strokeRect(px,M,pw,ph); ctx.strokeRect(px,H-M-ph,pw,ph);
     ctx.restore();
 
-    // Goalposts
     ctx.save(); ctx.strokeStyle=cfg.goalColor; ctx.lineWidth=4;
     if(cfg.goalShape==='hoop'){
-      // Basketball hoops (circles)
       ctx.beginPath(); ctx.arc(W/2,M+8,18,0,Math.PI*2); ctx.stroke();
       ctx.beginPath(); ctx.arc(W/2,H-M-8,18,0,Math.PI*2); ctx.stroke();
     } else {
       ctx.beginPath(); ctx.moveTo(gl,M); ctx.lineTo(gl,0); ctx.lineTo(gr,0); ctx.lineTo(gr,M); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(gl,H-M); ctx.lineTo(gl,H); ctx.lineTo(gr,H); ctx.lineTo(gr,H-M); ctx.stroke();
     }
-    // Net
     ctx.strokeStyle='rgba(255,255,255,0.15)'; ctx.lineWidth=1;
     for(let x=gl+12;x<gr;x+=12){
       ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,28); ctx.stroke();
@@ -537,7 +516,6 @@ export function renderSportGame(
     ctx.fillText('CPU',W/2,14); ctx.fillText('YOU',W/2,H-5);
   }
 
-  // ── Ball rendering ───────────────────────────────────────────
   function drawBall(ball: Body){
     const{x,y}=ball.pos,r=ball.r;
     ctx.save(); ctx.globalAlpha=0.22; ctx.fillStyle='#000';
@@ -577,7 +555,7 @@ export function renderSportGame(
       ctx.beginPath(); ctx.moveTo(x-r,y); ctx.lineTo(x+r,y); ctx.stroke();
       ctx.beginPath(); ctx.arc(x,y,r,Math.PI*0.3,Math.PI*0.7); ctx.stroke();
       ctx.beginPath(); ctx.arc(x,y,r,-Math.PI*0.7,-Math.PI*0.3); ctx.stroke();
-    } else { // disc
+    } else {
       ctx.strokeStyle=cfg.ballAccent; ctx.lineWidth=2;
       ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.stroke();
       ctx.fillStyle='rgba(255,255,255,0.2)';
@@ -587,7 +565,6 @@ export function renderSportGame(
     ctx.beginPath(); ctx.arc(x-r*0.3,y-r*0.3,r*0.2,0,Math.PI*2); ctx.fill();
   }
 
-  // ── Cartoon player ───────────────────────────────────────────
   function lighten(hex: string,amt: number):string{
     const n=parseInt(hex.replace('#',''),16);
     const r=clamp(((n>>16)&0xff)+amt,0,255);
@@ -600,10 +577,8 @@ export function renderSportGame(
     const{x,y}=b.pos,spd=vlen(b.vel),moving=spd>0.4,anim=moving?Math.sin(fc*(0.2+spd*0.04)):0;
     ctx.save(); ctx.globalAlpha=0.26; ctx.fillStyle='#000';
     ctx.beginPath(); ctx.ellipse(x+3,y+22,14,5,0,0,Math.PI*2); ctx.fill(); ctx.restore();
-    // Shorts
     ctx.fillStyle='#1a2a5a';
     ctx.beginPath(); ctx.roundRect(x-9,y+6,18,9,3); ctx.fill();
-    // Legs
     const la=anim*6,ra=-anim*6;
     ctx.fillStyle='#e8e8e8';
     ctx.beginPath(); ctx.roundRect(x-8+la-3.5,y+14,7,10,2); ctx.fill();
@@ -613,33 +588,27 @@ export function renderSportGame(
     ctx.beginPath(); ctx.roundRect(x+1+ra-3.5,y+14,7,10,2); ctx.fill();
     ctx.fillStyle='#111';
     ctx.beginPath(); ctx.ellipse(x+1+ra*1.1,y+25,7,3.5,-anim*0.22,0,Math.PI*2); ctx.fill();
-    // Body
     const jg=ctx.createLinearGradient(x-13,y,x+13,y+18);
     jg.addColorStop(0,lighten(jersey,40)); jg.addColorStop(1,jersey);
     ctx.fillStyle=jg; ctx.beginPath(); ctx.roundRect(x-11,y,22,17,[7,7,3,3]); ctx.fill();
     ctx.fillStyle='rgba(255,255,255,0.2)'; ctx.beginPath(); ctx.roundRect(x-3,y+2,6,13,2); ctx.fill();
-    // Arms
     const arm=moving?anim*0.35:0;
     ctx.fillStyle=jersey;
     ctx.save();ctx.translate(x-11,y+5);ctx.rotate(-0.25+arm);ctx.beginPath();ctx.roundRect(-3.5,0,7,12,3.5);ctx.fill();ctx.restore();
     ctx.save();ctx.translate(x+11,y+5);ctx.rotate(0.25-arm);ctx.beginPath();ctx.roundRect(-3.5,0,7,12,3.5);ctx.fill();ctx.restore();
-    // Neck + Head
     ctx.fillStyle='#e8b887';
     ctx.beginPath(); ctx.roundRect(x-3.5,y-4,7,6,2); ctx.fill();
     ctx.beginPath(); ctx.arc(x,y-12,13,0,Math.PI*2); ctx.fill();
     ctx.strokeStyle='rgba(0,0,0,0.1)'; ctx.lineWidth=1; ctx.stroke();
-    // Hair
     ctx.fillStyle=hair;
     ctx.beginPath(); ctx.arc(x,y-16,13,Math.PI,0); ctx.fill();
     ctx.beginPath(); ctx.arc(x,y-23,8,0,Math.PI*2); ctx.fill();
-    // Eyes
     ctx.fillStyle='#fff';
     ctx.beginPath(); ctx.ellipse(x-4.5,y-12,3.5,2.8,0,0,Math.PI*2); ctx.fill();
     ctx.beginPath(); ctx.ellipse(x+4.5,y-12,3.5,2.8,0,0,Math.PI*2); ctx.fill();
     ctx.fillStyle='#1a1a2e';
     ctx.beginPath(); ctx.arc(x-4,y-12,2,0,Math.PI*2); ctx.fill();
     ctx.beginPath(); ctx.arc(x+5,y-12,2,0,Math.PI*2); ctx.fill();
-    // Arrow for player
     if(isUser){
       ctx.fillStyle='#22c55e'; ctx.shadowColor='#22c55e'; ctx.shadowBlur=8;
       const ay=y-32;
@@ -648,11 +617,9 @@ export function renderSportGame(
     }
   }
 
-  // ── Controls overlay ─────────────────────────────────────────
   function drawControls(){
     ctx.save(); ctx.globalAlpha=0.16; ctx.fillStyle='#000';
     ctx.beginPath(); ctx.roundRect(0,H*0.68,W,H*0.32,0); ctx.fill(); ctx.restore();
-    // Joystick
     const j=S.joy;
     ctx.save(); ctx.globalAlpha=0.32; ctx.strokeStyle='#fff'; ctx.lineWidth=2;
     ctx.beginPath(); ctx.arc(j.base.x,j.base.y,j.OR,0,Math.PI*2); ctx.stroke();
@@ -666,7 +633,6 @@ export function renderSportGame(
     ctx.strokeStyle='rgba(255,255,255,0.55)'; ctx.lineWidth=2; ctx.stroke();
     ctx.fillStyle='rgba(255,255,255,0.7)'; ctx.font=`bold ${Math.floor(j.NR*0.55)}px sans-serif`;
     ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('✦',j.stick.x,j.stick.y);
-    // Buttons
     drawBtn(S.shootBtn); drawBtn(S.sprintBtn);
     ctx.font='bold 10px Inter,sans-serif'; ctx.textAlign='center'; ctx.fillStyle='rgba(255,255,255,0.45)';
     ctx.fillText(cfg.sprintLabel,S.sprintBtn.cx,S.sprintBtn.cy+S.sprintBtn.r+14);
@@ -689,7 +655,6 @@ export function renderSportGame(
     ctx.fillText(btn.label,btn.cx,btn.cy); ctx.shadowBlur=0; ctx.restore();
   }
 
-  // Loop
   let rafId=0;
   function loop(ts: number){ update(ts); render(); rafId=requestAnimationFrame(loop); }
   setTimeout(()=>{ resize(); resetBodies(S); prevTs=performance.now(); rafId=requestAnimationFrame(loop); },60);
